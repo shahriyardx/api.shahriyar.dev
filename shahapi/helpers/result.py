@@ -6,6 +6,7 @@ from PyPDF4 import PdfFileReader
 
 Result = Dict[str, list]
 
+
 class ResultParser:
     def __init__(self):
         self.passed_regex = r"(\d{6}) (\(.*?\))"
@@ -14,7 +15,12 @@ class ResultParser:
     def convert_to_result(self, result_string: str):
         result_string = result_string.strip()
 
-        if "T" in result_string or "P" in result_string or "T,P" in result_string or "PF" in result_string:
+        if (
+            "T" in result_string
+            or "P" in result_string
+            or "T,P" in result_string
+            or "PF" in result_string
+        ):
             results = re.findall(r"\d{4,5}[ ]?[  ]?\(T?,?P?[PF]?\)", result_string)
             if not results:
                 results = result_string.replace("withheld_sub- ", "")
@@ -47,7 +53,9 @@ class ResultParser:
         semester = filename.split("_")[1]
         regulation = filename.split("_")[2].split(".")[0]
 
-        all_result = re.findall(self.failed_regex, content) + re.findall(self.passed_regex, content)
+        all_result = re.findall(self.failed_regex, content) + re.findall(
+            self.passed_regex, content
+        )
         date = re.findall(r"\d{2}\-\d{2}\-\d{4}", file.pages[0].extractText())[0]
 
         data = dict()
@@ -60,7 +68,7 @@ class ResultParser:
                 "reffered": reffered,
                 "semester": semester,
                 "regulation": regulation,
-                "date": date
+                "date": date,
             }
 
             if reffered:
@@ -72,9 +80,9 @@ class ResultParser:
 
                     if len(splitted) > 1:
                         failed_in = splitted[1]
-                    
+
                     fails.append({"subject_code": subject_code, "failed_in": failed_in})
-                
+
                 data[int(roll)]["fails"] = fails
             else:
                 data[int(roll)]["cgpa"] = points
@@ -106,7 +114,7 @@ class ResultParser:
 
         if not all_data:
             to_return = {"error": "Result fot found"}
-        
+
         result_data = dict()
         result_data["roll"] = all_data[0]["roll"]
         result_data["regulation"] = all_data[0]["regulation"]
@@ -116,7 +124,7 @@ class ResultParser:
             result.pop("roll")
             result.pop("regulation")
             result_data["semesters"][result.pop("semester")] = result
-        
+
         to_return = {"results": result_data}
         current_app.result_cache[roll] = to_return
         return to_return
