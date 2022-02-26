@@ -90,7 +90,7 @@ class ResultParser:
         return data
 
     def get_all_result(self):
-        base = "shahapi/static/result"
+        base = os.path.join(os.getcwd(),"shahapi", "static", "result")
         results = dict()
 
         for folder in sorted(os.listdir(base), reverse=True):
