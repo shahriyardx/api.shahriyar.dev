@@ -96,9 +96,9 @@ class ResultParser:
         for folder in sorted(os.listdir(base), reverse=True):
             results[int(folder)] = dict()
 
-            for filename in os.listdir(f"{base}/{folder}"):
+            for filename in os.listdir(os.path.join(base, folder)):
                 if filename.endswith(".pdf"):
-                    full_name = f"{base}/{folder}/{filename}"
+                    full_name = os.path.join(base, folder, filename)
                     print(f"Parsing {full_name}")
 
                     results[int(folder)].update(self.get_result(full_name))
