@@ -1,5 +1,8 @@
+import os
+
+
 class Config:
-    SECRET_KEY = "result"
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
     @staticmethod
     def init_app(app):

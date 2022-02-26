@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from quart import Quart
 from quart_cors import cors
 
@@ -7,6 +8,7 @@ from .apps.result import result_api
 from .config import config
 from .urls import url_patterns
 
+load_dotenv('.env')
 app = Quart(__name__)
 
 cors(app, allow_origin="*")
