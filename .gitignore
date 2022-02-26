@@ -1,3 +1,4 @@
+*.pdf
 .env
 test.*
 __pycache__
